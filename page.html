@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Systems | AI Engineer Portfolio</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;700&family=Syncopate:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        :root {
+            /* Updated Palette: Deep Indigo to Teal */
+            --bg-color: #030308;
+            --text-color: #e0e6ed;
+            --accent-primary: #00d2ff;
+            /* Teal/Cyan */
+            --accent-secondary: #7000ff;
+            /* Deep Indigo/Purple */
+            --accent-glow: #00d2ff;
+            --card-bg: rgba(10, 10, 18, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --font-display: 'Syncopate', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            --font-mono: 'Fira Code', monospace;
+            --easing: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            width: 100vw;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- CRT & Grid Effects --- */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1));
+            background-size: 100% 4px;
+            z-index: 9998;
+            pointer-events: none;
+            animation: scanlineMove 0.6s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes scanlineMove {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 0 4px;
+            }
+        }
+
+        .blueprint-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: 60px 60px;
+            background-image:
+                linear-gradient(to right, rgba(112, 0, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(112, 0, 255, 0.03) 1px, transparent 1px);
+            pointer-events: none;
+        }
+
+        /* --- Custom Cursor --- */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .cursor-dot {
+            width: 5px;
+            height: 5px;
+            background-color: var(--accent-primary);
+        }
+
+        .cursor-outline {
+            width: 25px;
+            height: 25px;
+            border: 1px solid var(--accent-primary);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            mix-blend-mode: screen;
+        }
+
+        body:hover .cursor-outline.hovered {
+            width: 60px;
+            height: 60px;
+            background-color: rgba(0, 210, 255, 0.1);
+            border: 1px solid var(--accent-secondary);
+        }
+
+        /* --- WebGL Background --- */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.8;
+        }
+
+        /* --- Layout --- */
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- Magnetic Navigation --- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(3, 3, 8, 0.85);
+            backdrop-filter: blur(12px);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .system-status {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-primary);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #888;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-link::before {
+            content: '[';
+            margin-right: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            color: var(--accent-secondary);
+        }
+
+        .nav-link::after {
+            content: ']';
+            margin-left: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            color: var(--accent-secondary);
+        }
+
+        .nav-link:hover {
+            color: var(--accent-primary);
+        }
+
+        .nav-link:hover::before,
+        .nav-link:hover::after {
+            opacity: 1;
+        }
+
+        /* --- Hero Section --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 4rem;
+        }
+
+        .hero-meta {
+            font-family: var(--font-mono);
+            color: var(--accent-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3.5rem, 10vw, 9rem);
+            line-height: 0.85;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            position: relative;
+            text-shadow: 0 0 30px rgba(112, 0, 255, 0.3);
+        }
+
+        /* Holographic Text Effect */
+        h1:hover {
+            animation: glitch-anim 0.3s infinite;
+            text-shadow: 2px 0 var(--accent-primary), -2px 0 var(--accent-secondary);
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-2px, 2px);
+            }
+
+            40% {
+                transform: translate(-2px, -2px);
+            }
+
+            60% {
+                transform: translate(2px, 2px);
+            }
+
+            80% {
+                transform: translate(2px, -2px);
+            }
+
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        .neon-accent-line {
+            height: 2px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+            box-shadow: 0 0 15px var(--accent-primary);
+            margin-bottom: 2rem;
+            transition: width 0.1s;
+        }
+
+        .hero-sub {
+            font-size: 1.1rem;
+            max-width: 650px;
+            line-height: 1.6;
+            color: #ccc;
+            border-left: 2px solid var(--accent-primary);
+            padding-left: 1.5rem;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.6), transparent);
+            padding: 1.5rem;
+            backdrop-filter: blur(5px);
+            font-family: var(--font-body);
+            font-weight: 300;
+        }
+
+        /* --- Tech Marquee --- */
+        .marquee-section {
+            padding: 2.5rem 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid var(--accent-secondary);
+            border-bottom: 1px solid var(--accent-secondary);
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 4rem 0;
+            position: relative;
+            transform: rotate(-1deg) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-text {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            text-transform: uppercase;
+            margin-right: 4rem;
+            color: #aaa;
+            font-weight: 500;
+        }
+
+        .marquee-text span {
+            color: var(--accent-primary);
+            margin: 0 10px;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* --- Projects Grid (Bento/3D) --- */
+        .section-header {
+            margin-bottom: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            padding-bottom: 6rem;
+            perspective: 1000px;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            height: 500px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s linear, border-color 0.3s;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.1);
+        }
+
+        /* HUD Corners */
+        .card-hud-tl {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 20px;
+            height: 20px;
+            border-top: 2px solid var(--accent-primary);
+            border-left: 2px solid var(--accent-primary);
+            z-index: 10;
+        }
+
+        .card-hud-br {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 20px;
+            height: 20px;
+            border-bottom: 2px solid var(--accent-primary);
+            border-right: 2px solid var(--accent-primary);
+            z-index: 10;
+        }
+
+        .card-bg-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            transition: opacity 0.4s, transform 0.5s;
+            z-index: 1;
+            filter: grayscale(100%) contrast(130%) brightness(0.5);
+        }
+
+        .project-card:hover .card-bg-img {
+            opacity: 0.7;
+            transform: scale(1.05);
+            filter: grayscale(0%) contrast(100%);
+        }
+
+        .card-glare {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 210, 255, 0.15), transparent 60%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 2;
+            mix-blend-mode: screen;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 5;
+            padding: 2rem;
+            background: linear-gradient(to top, #030308, transparent);
+            transform: translateZ(30px);
+        }
+
+        .card-category {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .card-desc {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #999;
+            line-height: 1.4;
+        }
+
+        /* --- Skills / Specs --- */
+        .specs-section {
+            margin: 6rem 0;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .spec-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            position: relative;
+        }
+
+        .spec-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--accent-secondary);
+        }
+
+        .stat-bar-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            color: #aaa;
+        }
+
+        .stat-bar {
+            height: 4px;
+            background: #111;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+            width: 0%;
+            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* --- Terminal --- */
+        .terminal-window {
+            background: #050508;
+            border: 1px solid #333;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            font-family: 'Fira Code', monospace;
+            max-width: 900px;
+            margin: 0 auto 6rem auto;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #111;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #222;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .t-btn {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .red {
+            background: #ff5f56;
+        }
+
+        .yellow {
+            background: #ffbd2e;
+        }
+
+        .green {
+            background: #27c93f;
+        }
+
+        .terminal-title {
+            margin-left: 1rem;
+            font-size: 0.75rem;
+            color: #555;
+        }
+
+        .terminal-body {
+            padding: 1.5rem;
+            height: 320px;
+            overflow-y: auto;
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .output-line {
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .command-prefix {
+            color: var(--accent-primary);
+            margin-right: 0.8rem;
+            user-select: none;
+        }
+
+        .success {
+            color: var(--accent-primary);
+        }
+
+        .error {
+            color: #ff5555;
+        }
+
+        .info {
+            color: var(--accent-secondary);
+        }
+
+        .input-area {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .term-input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            width: 100%;
+            outline: none;
+        }
+
+        /* --- Footer --- */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 6rem 0 2rem 0;
+            margin-top: 5rem;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .footer-cta h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .footer-cta a {
+            color: var(--text-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent-primary);
+            padding-bottom: 5px;
+            font-family: var(--font-mono);
+        }
+
+        .footer-info {
+            text-align: right;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 2;
+        }
+
+        /* --- Mobile --- */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 14vw;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 3rem;
+            }
+        }
+
+        /* --- NEW: BADGE & METRIC STYLES (Minimal Addition) --- */
+        .cat-agentic {
+            color: #c084fc;
+        }
+
+        /* Purple */
+        .cat-data {
+            color: #00d2ff;
+        }
+
+        /* Cyan */
+        .cat-analytics {
+            color: #fb923c;
+        }
+
+        /* Orange */
+        .cat-devops {
+            color: #e5e7eb;
+        }
+
+        /* White/Grey */
+
+        .stack-container {
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .stack-badge {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+        }
+
+        .stack-badge:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+
+        .metric-pill {
+            margin-top: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 210, 255, 0.1);
+            border: 1px solid var(--accent-primary);
+            color: var(--accent-primary);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.1);
+        }
+
+        .metric-icon {
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="scanlines"></div>
+    <div class="blueprint-grid"></div>
+
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <div id="canvas-container"></div>
+
+    <nav>
+        <div class="nav-left">
+            <div class="logo magnetic-area">
+                <div class="magnetic-wrap">ALEX<span style="color:var(--accent-primary)">.DEV</span></div>
+            </div>
+            <div class="system-status">
+                <div class="status-dot"></div>
+                SYS.ONLINE
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li class="nav-item magnetic-area"><a href="#projects" class="nav-link magnetic-wrap">Projects</a></li>
+            <li class="nav-item magnetic-area"><a href="#specs" class="nav-link magnetic-wrap">Specs</a></li>
+            <li class="nav-item magnetic-area"><a href="#terminal-interface" class="nav-link magnetic-wrap">Terminal</a>
+            </li>
+            <li class="nav-item magnetic-area"><a href="#contact" class="nav-link magnetic-wrap">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        <!-- Hero -->
+        <header>
+            <div class="hero-meta">ID: AI_ENG_V4 // CLEARANCE: PUBLIC</div>
+            <div class="hero-content-wrapper">
+                <h1 id="hero-headline">Agentic Systems<br>Architecture</h1>
+                <div class="neon-accent-line" id="neon-line"></div>
+                <div class="hero-sub">
+                    Architecting autonomous AI agents and data pipelines. Specialized in <span
+                        style="color:var(--accent-primary)">LLM orchestration</span> and real-time infrastructure.
+                    Turning research into production-grade impact.
+                </div>
+            </div>
+
+            <div class="hero-meta"
+                style="position:absolute; bottom: 3rem; right: 0; display:flex; gap:20px; align-items:center;">
+                <span style="width: 40px; height: 1px; background:var(--accent-primary);"></span>
+                SCROLL TO INITIALIZE
+            </div>
+        </header>
+
+        <!-- Marquee -->
+        <section class="marquee-section">
+            <div class="marquee-content">
+                <span class="marquee-text">
+                    LangChain <span>//</span> RAG Systems <span>//</span> PyTorch <span>//</span> FastAPI
+                    <span>//</span> Docker <span>//</span> Kubernetes <span>//</span> Neo4j <span>//</span> Airflow
+                    <span>//</span> Three.js
+                </span>
+                <span class="marquee-text">
+                    LangChain <span>//</span> RAG Systems <span>//</span> PyTorch <span>//</span> FastAPI
+                    <span>//</span> Docker <span>//</span> Kubernetes <span>//</span> Neo4j <span>//</span> Airflow
+                    <span>//</span> Three.js
+                </span>
+            </div>
+        </section>
+
+        <!-- Projects (EXPANDED) -->
+        <section id="projects">
+            <div class="section-header">
+                <div>
+                    <div class="hero-meta">DIRECTORY: /PROJECTS</div>
+                    <div class="section-title" data-value="Deployed_Systems">Deployed Systems</div>
+                </div>
+                <!-- Updated Count -->
+                <div class="hero-meta" style="text-align: right;">13 OBJECTS FOUND</div>
+            </div>
+
+            <div class="projects-grid">
+
+                <!-- === AGENTIC AI SYSTEMS (4 Cards) === -->
+
+                <!-- 1. Autonomous Research Agent (Existing) -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/ai_agent/600/800" alt="Agent" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-agentic">[AGENTIC AI]</span>
+                        <h3 class="card-title" data-value="Autonomous_Research_Agent">Autonomous Research Agent</h3>
+                        <p class="card-desc">Multi-modal agent capable of complex reasoning, web-browsing, and report
+                            synthesis using ReAct pattern.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">LangChain</span><span class="stack-badge">React</span><span
+                                class="stack-badge">OpenAI</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Latency: 200ms
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2. NEW: Data Quality Agent Mesh -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/agent_mesh/600/800" alt="Mesh" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-agentic">[AGENTIC AI]</span>
+                        <h3 class="card-title" data-value="Data_Quality_Agent_Mesh">Data Quality Agent Mesh</h3>
+                        <p class="card-desc">LangGraph multi-agent system that profiles datasets, detects anomalies, and
+                            auto-opens GitHub issues for bad data.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">LangGraph</span><span
+                                class="stack-badge">Postgres+pgvector</span><span class="stack-badge">dbt</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Anomaly Rate: <0.1%< /div>
+                        </div>
+                </article>
+
+                <!-- 3. NEW: Agentic BI Co-Pilot -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/bi_copilot/600/800" alt="BI" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-agentic">[AGENTIC AI]</span>
+                        <h3 class="card-title" data-value="Agentic_BI_Co_Pilot">Agentic BI Co-Pilot</h3>
+                        <p class="card-desc">Chat interface where users ask questions; agent selects data marts,
+                            generates SQL, runs queries, returns charts.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">LangChain ReAct</span><span class="stack-badge">DuckDB</span><span
+                                class="stack-badge">Vega-Lite</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Accuracy: 98%
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 4. NEW: Self-Healing Pipeline -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/healing/600/800" alt="Healing" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-agentic">[AGENTIC AI]</span>
+                        <h3 class="card-title" data-value="Self_Healing_Pipeline">Self-Healing Data Pipeline</h3>
+                        <p class="card-desc">Agent monitors Airflow health, proposes fixes, and rolls back bad
+                            deployments autonomously via GitOps.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">Airflow</span><span class="stack-badge">Prometheus</span><span
+                                class="stack-badge">LLM Tools</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Auto-Resolve: 95%
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- === DATA ENGINEERING (3 Cards) === -->
+
+                <!-- 5. Real-Time Fraud Stream (Existing) -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/data_pipe/600/800" alt="Data" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-data">[DATA ENGINEERING]</span>
+                        <h3 class="card-title" data-value="Real_Time_Stream">Real-Time Fraud Stream</h3>
+                        <p class="card-desc">Kafka/Spark pipeline processing 10k+ events/sec with sub-50ms latency and
+                            automated alerting.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">Kafka</span><span class="stack-badge">Spark</span><span
+                                class="stack-badge">PyTorch</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Throughput: 10k/s
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 6. NEW: Streaming Customer 360 -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/cust360/600/800" alt="360" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-data">[DATA ENGINEERING]</span>
+                        <h3 class="card-title" data-value="Customer_360_Platform">Streaming Customer 360</h3>
+                        <p class="card-desc">Real-time ingestion of clickstream and CRM data into a unified dimensional
+                            warehouse for instant insights.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">Redpanda</span><span class="stack-badge">Airflow</span><span
+                                class="stack-badge">BigQuery</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Latency: 5s
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 7. NEW: MLOps Lifecycle Pipeline -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/mlops/600/800" alt="MLOps" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-data">[DATA ENGINEERING]</span>
+                        <h3 class="card-title" data-value="MLOps_Lifecycle_Pipeline">MLOps Lifecycle Pipeline</h3>
+                        <p class="card-desc">End-to-end flow: raw data → feature store → training → model registry →
+                            deployment → drift monitoring.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">Spark</span><span class="stack-badge">MLflow</span><span
+                                class="stack-badge">Docker</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Cycle Time: 4h
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- === BUSINESS ANALYTICS (2 Cards) === -->
+
+                <!-- 8. NEW: Agentic KPI Storyteller -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/kpi/600/800" alt="KPI" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-analytics">[BUSINESS ANALYTICS]</span>
+                        <h3 class="card-title" data-value="Agentic_KPI_Storyteller">Agentic KPI Storyteller</h3>
+                        <p class="card-desc">Pulls network metrics, computes KPIs, and generates weekly operational
+                            summaries using an LLM.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">TimescaleDB</span><span class="stack-badge">dbt</span><span
+                                class="stack-badge">Next.js</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Report Time: -80%
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 9. NEW: Revenue & Churn Simulator -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/sim/600/800" alt="Sim" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-analytics">[BUSINESS ANALYTICS]</span>
+                        <h3 class="card-title" data-value="Churn_Simulation_Studio">Revenue & Churn Simulator</h3>
+                        <p class="card-desc">Interactive Monte Carlo simulator where users adjust inputs and an agent
+                            explains probabilistic outcomes.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">FastAPI</span><span class="stack-badge">React</span><span
+                                class="stack-badge">Stochastic</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Scenarios: 10k+
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- === DEVOPS (3 Cards) === -->
+
+                <!-- 10. NEW: DevOps Deployment Assistant -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/devops/600/800" alt="DevOps" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-devops">[DEVOPS]</span>
+                        <h3 class="card-title" data-value="DevOps_Deployment_Assistant">DevOps Deployment Assistant</h3>
+                        <p class="card-desc">Agent reads repo, writes optimized Dockerfiles, generates K8s manifests,
+                            and opens PRs with infra changes.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">GitHub API</span><span class="stack-badge">Docker</span><span
+                                class="stack-badge">K8s</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>PR Time: 15m
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 11. NEW: Observability-as-Code -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/obs/600/800" alt="Obs" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-devops">[DEVOPS]</span>
+                        <h3 class="card-title" data-value="Observability_as_Code">Observability-as-Code</h3>
+                        <p class="card-desc">Platform to define monitoring alerts and Grafana dashboards as
+                            infrastructure code via a CLI and Web UI.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">Prometheus</span><span class="stack-badge">Grafana</span><span
+                                class="stack-badge">Terraform</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Monitors: 50+
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 12. NEW: Data Product Template -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/template/600/800" alt="Template" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-devops">[DEVOPS]</span>
+                        <h3 class="card-title" data-value="Data_Product_Template">Data Product Platform Template</h3>
+                        <p class="card-desc">Production-grade Cookiecutter template including ingestion, warehouse, dbt
+                            models, APIs, and full CI/CD.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">Terraform</span><span class="stack-badge">Docker</span><span
+                                class="stack-badge">FastAPI</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Setup: <10m< /div>
+                        </div>
+                </article>
+
+                <!-- 13. Existing: Enterprise Knowledge Base -->
+                <article class="project-card tilt-card">
+                    <div class="card-hud-tl"></div>
+                    <div class="card-hud-br"></div>
+                    <img src="https://picsum.photos/seed/rag_sys/600/800" alt="RAG" class="card-bg-img">
+                    <div class="card-glare"></div>
+                    <div class="card-content">
+                        <span class="card-category cat-data">[INFRASTRUCTURE]</span>
+                        <h3 class="card-title" data-value="Enterprise_Knowledge_Base">Enterprise Knowledge Base</h3>
+                        <p class="card-desc">Vector search infrastructure (Pinecone) serving 50M+ documents with
+                            high-accuracy retrieval.</p>
+                        <div class="stack-container">
+                            <span class="stack-badge">Pinecone</span><span class="stack-badge">FastAPI</span><span
+                                class="stack-badge">OpenAI</span>
+                        </div>
+                        <div class="metric-pill">
+                            <div class="metric-icon"></div>Docs: 50M+
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Specs / Skills -->
+        <section id="specs" class="specs-section">
+            <div class="section-header">
+                <div>
+                    <div class="hero-meta">DIAGNOSTIC_REPORT</div>
+                    <div class="section-title" data-value="System_Specs">System Specs</div>
+                </div>
+            </div>
+
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>PYTHON / PANDAS</span><span>98%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 98%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>SQL / NO-SQL</span><span>92%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 92%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>AIRFLOW / DAGS</span><span>88%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 88%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="spec-card">
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>PYTORCH / TENSORFLOW</span><span>90%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>LLM ORCHESTRATION</span><span>95%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 95%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>VECTOR DATABASES</span><span>89%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 89%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="spec-card">
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>REACT / THREE.JS</span><span>85%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>NODE.JS / FASTAPI</span><span>93%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 93%"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar-container">
+                        <div class="stat-label"><span>DOCKER / K8S</span><span>90%</span></div>
+                        <div class="stat-bar">
+                            <div class="stat-fill" style="width: 90%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Terminal -->
+        <section id="terminal-interface">
+            <div class="hero-meta" style="text-align:center; margin-bottom: 1rem;">INITIALIZE_SECURE_CONNECTION</div>
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-buttons">
+                        <div class="t-btn red"></div>
+                        <div class="t-btn yellow"></div>
+                        <div class="t-btn green"></div>
+                    </div>
+                    <div class="terminal-title">guest@ai-portfolio:~</div>
+                </div>
+                <div class="terminal-body" id="terminal-body">
+                    <div class="output-line">Welcome to Alex's Neural Interface v2.4</div>
+                    <div class="output-line">Type <span class="info">'help'</span> to see available commands.</div>
+                    <div class="output-line">----------------------------------------</div><br>
+                </div>
+                <div style="padding: 0 1.5rem 1.5rem 1.5rem;">
+                    <div class="input-area">
+                        <span class="command-prefix">guest@ai-portfolio:~$</span>
+                        <input type="text" class="term-input" id="term-input" autocomplete="off" spellcheck="false"
+                            autofocus>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="contact">
+            <div class="footer-cta">
+                <h2>Ready to Architect</h2>
+                <a href="mailto:email@example.com" class="magnetic-link">INITIALIZE PROTOCOL</a>
+            </div>
+            <div class="footer-info">
+                LOC: CYBERSPACE<br>
+                TIME: <span id="clock">00:00:00</span><br>
+                STATUS: OPEN FOR COLLABORATION
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        /**
+         * 1. TEXT SCRAMBLE EFFECT
+         */
+        class TextScramble {
+            constructor(el) {
+                this.el = el; this.chars = '!<>-_\\/[]{}—=+*^?#________';
+                this.update = this.update.bind(this);
+            }
+            setText(newText) {
+                const oldText = this.el.innerText; const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                this.queue = [];
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || ''; const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40); const end = start + Math.floor(Math.random() * 40);
+                    this.queue.push({ from, to, start, end });
+                }
+                cancelAnimationFrame(this.frameRequest); this.frame = 0; this.update(); return promise;
+            }
+            update() {
+                let output = ''; let complete = 0;
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    if (this.frame >= end) { complete++; output += to; }
+                    else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) { char = this.randomChar(); this.queue[i].char = char; }
+                        output += `<span style="color:var(--accent-primary)">${char}</span>`;
+                    } else { output += from; }
+                }
+                this.el.innerHTML = output;
+                if (complete === this.queue.length) { this.resolve(); } else { this.frameRequest = requestAnimationFrame(this.update); this.frame++; }
+            }
+            randomChar() { return this.chars[Math.floor(Math.random() * this.chars.length)]; }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroEl = document.querySelector('#hero-headline'); if (heroEl) {
+                const fx = new TextScramble(heroEl);
+                const phrases = ['Agentic Systems Architecture', 'Production AI Engineer', 'Data Pipeline Architect'];
+                let counter = 0;
+                const next = () => { fx.setText(phrases[counter]).then(() => { setTimeout(next, 3000); }); counter = (counter + 1) % phrases.length; };
+                next();
+            }
+            document.querySelectorAll('.card-title').forEach(el => {
+                const originalText = el.getAttribute('data-value');
+                const titleFx = new TextScramble(el);
+                el.parentElement.parentElement.addEventListener('mouseenter', () => { if (originalText) titleFx.setText(originalText); });
+            });
+        });
+
+        /**
+         * 2. CURSOR & MAGNETIC NAV
+         */
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX; const posY = e.clientY;
+            cursorDot.style.left = `${posX}px`; cursorDot.style.top = `${posY}px`;
+            cursorOutline.animate({ left: `${posX}px`, top: `${posY}px` }, { duration: 500, fill: "forwards" });
+        });
+
+        const magnets = document.querySelectorAll('.magnetic-area');
+        magnets.forEach((magnet) => {
+            const content = magnet.querySelector('.magnetic-wrap');
+            magnet.addEventListener('mousemove', (e) => {
+                const rect = magnet.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                content.style.transform = `translate(${x * 0.5}px, ${y * 0.5}px)`;
+            });
+            magnet.addEventListener('mouseleave', () => { content.style.transform = 'translate(0px, 0px)'; });
+        });
+
+        document.querySelectorAll('a, .project-card, .magnetic-area').forEach(el => {
+            el.addEventListener('mouseenter', () => { cursorOutline.classList.add('hovered'); cursorOutline.style.borderRadius = '4px'; });
+            el.addEventListener('mouseleave', () => { cursorOutline.classList.remove('hovered'); cursorOutline.style.borderRadius = '50%'; });
+        });
+
+        /**
+         * 3. THREE.JS SHADER (Indigo/Teal Palette)
+         */
+        const initThreeJS = () => {
+            const container = document.getElementById('canvas-container');
+            if (!container) return;
+            const scene = new THREE.Scene();
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+            const geometry = new THREE.PlaneGeometry(2, 2);
+            const uniforms = { u_time: { value: 0.0 }, u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }, u_mouse: { value: new THREE.Vector2(0, 0) } };
+            const fragmentShader = `
+                uniform float u_time; uniform vec2 u_resolution; uniform vec2 u_mouse;
+                vec3 palette( float t ) {
+                    // Deep Indigo to Teal shifts
+                    vec3 a = vec3(0.5, 0.5, 0.5); vec3 b = vec3(0.5, 0.5, 0.5); 
+                    vec3 c = vec3(1.0, 1.0, 1.0); 
+                    vec3 d = vec3(0.50, 0.20, 0.25); // Shifted hues for blue/indigo
+                    return a + b*cos( 6.28318*(c*t+d) );
+                }
+                void main() {
+                    vec2 uv = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / u_resolution.y;
+                    vec2 uv0 = uv; vec3 finalColor = vec3(0.0);
+                    uv += (u_mouse * 0.04);
+                    for (float i = 0.0; i < 3.0; i++) {
+                        uv = fract(uv * 1.5) - 0.5;
+                        float d = length(uv) * exp(-length(uv0));
+                        vec3 col = palette(length(uv0) + i*.4 + u_time*.4);
+                        d = sin(d*8. + u_time)/8.; d = abs(d); d = pow(0.01 / d, 1.2);
+                        finalColor += col * d;
+                    }
+                    gl_FragColor = vec4(finalColor * 0.12, 1.0);
+                }
+            `;
+            const material = new THREE.ShaderMaterial({ uniforms: uniforms, fragmentShader: fragmentShader, vertexShader: `void main() { gl_Position = vec4( position, 1.0 ); }` });
+            const plane = new THREE.Mesh(geometry, material);
+            scene.add(plane);
+            const neonLine = document.getElementById('neon-line');
+            document.addEventListener('mousemove', (e) => { uniforms.u_mouse.value.x = e.clientX / window.innerWidth; uniforms.u_mouse.value.y = 1.0 - (e.clientY / window.innerHeight); });
+            const animate = () => {
+                requestAnimationFrame(animate); uniforms.u_time.value += 0.005;
+                const pulse = (Math.sin(uniforms.u_time.value * 2) + 1) / 2; const width = 10 + (pulse * 90);
+                if (neonLine) neonLine.style.width = `${width}%`;
+                renderer.render(scene, camera);
+            };
+            animate();
+            window.addEventListener('resize', () => { renderer.setSize(window.innerWidth, window.innerHeight); uniforms.u_resolution.value.x = window.innerWidth; uniforms.u_resolution.value.y = window.innerHeight; });
+        };
+        initThreeJS();
+
+        /**
+         * 4. 3D TILT CARDS
+         */
+        const cards = document.querySelectorAll('.tilt-card');
+        cards.forEach(card => {
+            const glare = card.querySelector('.card-glare');
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                const centerX = rect.width / 2; const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -10; const rotateY = ((x - centerX) / centerX) * 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                glare.style.opacity = '1';
+                glare.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(0, 210, 255, 0.2), transparent 60%)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)'; glare.style.opacity = '0';
+            });
+        });
+
+        /**
+         * 5. TERMINAL
+         */
+        const termInput = document.getElementById('term-input');
+        const termBody = document.getElementById('terminal-body');
+        if (termInput && termBody) {
+            document.querySelector('.terminal-window').addEventListener('click', () => { termInput.focus(); });
+            const commands = {
+                'help': 'Available commands: <br> - <span class="info">about</span>: Who am I?<br> - <span class="info">projects</span>: View projects<br> - <span class="info">contact</span>: Get my email<br> - <span class="info">clear</span>: Clear terminal',
+                'about': 'NAME: Alex<br>ROLE: AI Engineer & Full-Stack Data Scientist<br>FOCUS: Agentic Systems, LLMs, Data Pipelines.',
+                'projects': '01. Autonomous Research Agent<br>02. Real-Time Fraud Stream<br>03. Enterprise Knowledge Base<br>...+ 10 more systems.',
+                'contact': 'EMAIL_INITIATED...<br>Send protocol to: <a href="mailto:email@example.com" style="color:var(--accent-primary)">email@example.com</a>',
+                'clear': 'CLEAR'
+            };
+            termInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    const inputVal = this.value.trim().toLowerCase();
+                    const userLine = document.createElement('div');
+                    userLine.className = 'output-line';
+                    userLine.innerHTML = `<span class="command-prefix">guest@ai-portfolio:~$</span> ${this.value}`;
+                    termBody.appendChild(userLine);
+                    if (inputVal === 'clear') { termBody.innerHTML = ''; }
+                    else if (commands[inputVal]) {
+                        const responseLine = document.createElement('div');
+                        responseLine.className = 'output-line success';
+                        responseLine.innerHTML = commands[inputVal];
+                        termBody.appendChild(responseLine);
+                    } else if (inputVal !== '') {
+                        const errorLine = document.createElement('div');
+                        errorLine.className = 'output-line error';
+                        errorLine.innerHTML = `Command not found: ${inputVal}. Type 'help'.`;
+                        termBody.appendChild(errorLine);
+                    }
+                    this.value = ''; termBody.scrollTop = termBody.scrollHeight;
+                }
+            });
+        }
+
+        /**
+         * 6. SKILL ANIMATION & CLOCK
+         */
+        const observerOptions = { threshold: 0.5 };
+        const skillObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.stat-fill');
+                    bars.forEach(bar => {
+                        const targetWidth = bar.style.width;
+                        bar.style.width = '0%';
+                        setTimeout(() => { bar.style.width = targetWidth; }, 100);
+                    });
+                    skillObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.spec-card').forEach(card => { skillObserver.observe(card); });
+
+        setInterval(() => {
+            const now = new Date(); const clockEl = document.getElementById('clock');
+            if (clockEl) clockEl.innerText = now.toISOString().split('T')[1].split('.')[0] + " UTC";
+        }, 1000);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,115 @@
+{
+    "nav": {
+        "projects": "Projects",
+        "specs": "Specs",
+        "terminal": "Terminal",
+        "contact": "Contact",
+        "status": "SYS.ONLINE"
+    },
+    "hero": {
+        "clearance": "ID: AI_ENG_V4 // CLEARANCE: PUBLIC",
+        "sub": "Architecting autonomous AI agents and data pipelines. Specialized in <1>LLM orchestration</1> and real-time infrastructure. Turning research into production-grade impact.",
+        "scroll": "SCROLL TO INITIALIZE",
+        "phrases": [
+            "Agentic Systems Architecture",
+            "Production AI Engineer",
+            "Data Pipeline Architect"
+        ]
+    },
+    "projects": {
+        "directory": "DIRECTORY: /PROJECTS",
+        "title": "Deployed Systems",
+        "found": "OBJECTS FOUND",
+        "metrics": {
+            "latency": "Latency",
+            "anomaly_rate": "Anomaly Rate",
+            "accuracy": "Accuracy",
+            "auto_resolve": "Auto-Resolve",
+            "throughput": "Throughput",
+            "cycle_time": "Cycle Time",
+            "report_time": "Report Time",
+            "scenarios": "Scenarios",
+            "pr_time": "PR Time",
+            "monitors": "Monitors",
+            "setup": "Setup",
+            "docs": "Docs"
+        },
+        "items": {
+            "research_agent": {
+                "title": "Autonomous Research Agent",
+                "desc": "Multi-modal agent capable of complex reasoning, web-browsing, and report synthesis using ReAct pattern."
+            },
+            "data_quality": {
+                "title": "Data Quality Agent Mesh",
+                "desc": "LangGraph multi-agent system that profiles datasets, detects anomalies, and auto-opens GitHub issues."
+            },
+            "bi_copilot": {
+                "title": "Agentic BI Co-Pilot",
+                "desc": "Chat interface where users ask questions; agent selects data marts, generates SQL, and returns charts."
+            },
+            "self_healing": {
+                "title": "Self-Healing Data Pipeline",
+                "desc": "Agent monitors Airflow health, proposes fixes, and rolls back bad deployments via GitOps."
+            },
+            "fraud_stream": {
+                "title": "Real-Time Fraud Stream",
+                "desc": "Kafka/Spark pipeline processing 10k+ events/sec with sub-50ms latency and automated alerting."
+            },
+            "customer_360": {
+                "title": "Streaming Customer 360",
+                "desc": "Real-time ingestion of clickstream and CRM data into a unified dimensional warehouse."
+            },
+            "mlops": {
+                "title": "MLOps Lifecycle Pipeline",
+                "desc": "End-to-end flow: raw data → feature store → training → deployment → drift monitoring."
+            },
+            "kpi_storyteller": {
+                "title": "Agentic KPI Storyteller",
+                "desc": "Pulls network metrics, computes KPIs, and generates weekly operational summaries using an LLM."
+            },
+            "churn_simulator": {
+                "title": "Revenue & Churn Simulator",
+                "desc": "Interactive Monte Carlo simulator where users adjust inputs and an agent explains outcomes."
+            },
+            "devops_assistant": {
+                "title": "DevOps Deployment Assistant",
+                "desc": "Agent reads repo, writes optimized Dockerfiles, generates K8s manifests, and opens PRs."
+            },
+            "obs_as_code": {
+                "title": "Observability-as-Code",
+                "desc": "Platform to define monitoring alerts and Grafana dashboards as infrastructure code via CLI and UI."
+            },
+            "data_product": {
+                "title": "Data Product Platform Template",
+                "desc": "Production-grade Cookiecutter template including ingestion, warehouse, dbt models, and CI/CD."
+            },
+            "knowledge_base": {
+                "title": "Enterprise Knowledge Base",
+                "desc": "Vector search infrastructure (Pinecone) serving 50M+ documents with high-accuracy retrieval."
+            }
+        }
+    },
+    "specs": {
+        "report": "DIAGNOSTIC_REPORT",
+        "title": "System Specs"
+    },
+    "terminal": {
+        "connection": "INITIALIZE_SECURE_CONNECTION",
+        "welcome": "Welcome to Matheus's Neural Interface v2.4",
+        "help_msg": "Type <1>'help'</1> to see available commands.",
+        "commands": {
+            "help": "Available commands: <br> - <span class=\"info\">about</span>: Who am I?<br> - <span class=\"info\">projects</span>: View projects<br> - <span class=\"info\">contact</span>: Get my email<br> - <span class=\"info\">clear</span>: Clear terminal",
+            "about": "NAME: Matheus<br>ROLE: AI Engineer & Full-Stack Data Scientist<br>FOCUS: Agentic Systems, LLMs, Data Pipelines.",
+            "projects": "01. Autonomous Research Agent<br>02. Data Quality Agent Mesh<br>03. Agentic BI Co-Pilot<br>04. Self-Healing Data Pipeline<br>05. Real-Time Fraud Stream<br>06. Streaming Customer 360<br>07. MLOps Lifecycle Pipeline<br>08. Agentic KPI Storyteller<br>09. Revenue & Churn Simulator<br>10. DevOps Deployment Assistant<br>11. Observability-as-Code<br>12. Data Product Platform Template<br>13. Enterprise Knowledge Base",
+            "contact": "EMAIL_INITIATED...<br>Send protocol to: <a href=\"mailto:email@example.com\" style=\"color:var(--accent-primary)\">email@example.com</a>",
+            "clear": "CLEAR",
+            "notFound": "Command not found: {{cmd}}. Type 'help'."
+        }
+    },
+    "footer": {
+        "cta": "Ready to Architect",
+        "protocol": "INITIALIZE PROTOCOL",
+        "loc": "LOC: CYBERSPACE",
+        "status": "STATUS: OPEN FOR COLLABORATION"
+    }
+}

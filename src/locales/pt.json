@@ -1,0 +1,115 @@
+{
+    "nav": {
+        "projects": "Projetos",
+        "specs": "Especificações",
+        "terminal": "Terminal",
+        "contact": "Contato",
+        "status": "SYS.ONLINE"
+    },
+    "hero": {
+        "clearance": "ID: AI_ENG_V4 // ACESSO: PÚBLICO",
+        "sub": "Arquitetando agentes de IA autônomos e pipelines de dados. Especializado em <1>orquestração de LLM</1> e infraestrutura em tempo real. Transformando pesquisa em impacto de produção.",
+        "scroll": "SCROLL PARA INICIALIZAR",
+        "phrases": [
+            "Arquitetura de Sistemas Agênticos",
+            "Engenheiro de IA de Produção",
+            "Arquiteto de Pipelines de Dados"
+        ]
+    },
+    "projects": {
+        "directory": "DIRETÓRIO: /PROJETOS",
+        "title": "Sistemas Implantados",
+        "found": "OBJETOS ENCONTRADOS",
+        "metrics": {
+            "latency": "Latência",
+            "anomaly_rate": "Taxa de Anomalia",
+            "accuracy": "Acurácia",
+            "auto_resolve": "Auto-Resolução",
+            "throughput": "Vazão",
+            "cycle_time": "Tempo de Ciclo",
+            "report_time": "Tempo de Relatório",
+            "scenarios": "Cenários",
+            "pr_time": "Tempo de PR",
+            "monitors": "Monitores",
+            "setup": "Configuração",
+            "docs": "Docs"
+        },
+        "items": {
+            "research_agent": {
+                "title": "Agente de Pesquisa Autônomo",
+                "desc": "Agente multi-modal capaz de raciocínio complexo, navegação na web e síntese de relatórios usando o padrão ReAct."
+            },
+            "data_quality": {
+                "title": "Malha de Agentes de Qualidade de Dados",
+                "desc": "Sistema multi-agente LangGraph que perfila datasets, detecta anomalias e abre issues no GitHub para dados ruins."
+            },
+            "bi_copilot": {
+                "title": "Co-Piloto de BI Agêntico",
+                "desc": "Interface de chat onde usuários fazem perguntas; o agente seleciona data marts, gera SQL e retorna gráficos."
+            },
+            "self_healing": {
+                "title": "Pipeline de Dados Auto-Regenerativo",
+                "desc": "Agente monitora a saúde do Airflow, propõe correções e reverte implantações ruins autonomamente via GitOps."
+            },
+            "fraud_stream": {
+                "title": "Fluxo de Fraude em Tempo Real",
+                "desc": "Pipeline Kafka/Spark processando 10k+ eventos/seg com latência sub-50ms e alertas automatizados."
+            },
+            "customer_360": {
+                "title": "Streaming Customer 360",
+                "desc": "Ingestão em tempo real de clickstream e dados de CRM em um armazém dimensional unificado."
+            },
+            "mlops": {
+                "title": "Pipeline de Ciclo de Vida MLOps",
+                "desc": "Fluxo de ponta a ponta: dados brutos → feature store → treinamento → registro → monitoramento de drift."
+            },
+            "kpi_storyteller": {
+                "title": "Contador de Histórias de KPI Agêntico",
+                "desc": "Extrai métricas de rede, computa KPIs e gera resumos operacionais semanais usando um LLM."
+            },
+            "churn_simulator": {
+                "title": "Simulador de Receita e Churn",
+                "desc": "Simulador interativo de Monte Carlo onde usuários ajustam entradas e um agente explica os resultados."
+            },
+            "devops_assistant": {
+                "title": "Assistente de Implantação DevOps",
+                "desc": "Agente lê o repositório, escreve Dockerfiles otimizados, gera manifestos K8s e abre PRs com mudanças."
+            },
+            "obs_as_code": {
+                "title": "Observabilidade como Código",
+                "desc": "Plataforma para definir alertas e painéis do Grafana como código de infraestrutura via CLI e UI web."
+            },
+            "data_product": {
+                "title": "Template de Plataforma de Produto de Dados",
+                "desc": "Template Cookiecutter de nível de produção incluindo ingestão, warehouse, modelos dbt e CI/CD."
+            },
+            "knowledge_base": {
+                "title": "Base de Conhecimento Empresarial",
+                "desc": "Infraestrutura de busca vetorial (Pinecone) servindo 50M+ documentos com recuperação de alta precisão."
+            }
+        }
+    },
+    "specs": {
+        "report": "RELATÓRIO_DIAGNÓSTICO",
+        "title": "Especificações do Sistema"
+    },
+    "terminal": {
+        "connection": "INICIALIZAR_CONEXÃO_SEGURA",
+        "welcome": "Bem-vindo à Interface Neural de Matheus v2.4",
+        "help_msg": "Digite <1>'help'</1> para ver os comandos disponíveis.",
+        "commands": {
+            "help": "Comandos disponíveis: <br> - <span class=\"info\">about</span>: Quem sou eu?<br> - <span class=\"info\">projects</span>: Ver projetos<br> - <span class=\"info\">contact</span>: Obter meu e-mail<br> - <span class=\"info\">clear</span>: Limpar terminal",
+            "about": "NOME: Matheus<br>CARGO: Engenheiro de IA e Cientista de Dados Full-Stack<br>FOCO: Sistemas Agênticos, LLMs, Pipelines de Dados.",
+            "projects": "01. Agente de Pesquisa Autônomo<br>02. Malha de Agentes de Qualidade de Dados<br>03. Co-Piloto de BI Agêntico<br>04. Pipeline de Dados Auto-Regenerativo<br>05. Fluxo de Fraude em Tempo Real<br>06. Streaming Customer 360<br>07. Pipeline de Ciclo de Vida MLOps<br>08. Contador de Histórias de KPI Agêntico<br>09. Simulador de Receita e Churn<br>10. Assistente de Implantação DevOps<br>11. Observabilidade como Código<br>12. Template de Plataforma de Produto de Dados<br>13. Base de Conhecimento Empresarial",
+            "contact": "E-MAIL_INICIALIZADO...<br>Enviar protocolo para: <a href=\"mailto:email@example.com\" style=\"color:var(--accent-primary)\">email@example.com</a>",
+            "clear": "LIMPAR",
+            "notFound": "Comando não encontrado: {{cmd}}. Digite 'help'."
+        }
+    },
+    "footer": {
+        "cta": "Pronto para Arquitetar",
+        "protocol": "INICIALIZAR PROTOCOLO",
+        "loc": "LOC: CIBERESPAÇO",
+        "status": "STATUS: ABERTO PARA COLABORAÇÃO"
+    }
+}
