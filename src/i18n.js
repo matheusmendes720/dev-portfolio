@@ -19,13 +19,14 @@ i18n
     .use(initReactI18next)
     .init({
         resources,
+        lng: 'pt-BR', // default: load in Portuguese first
         fallbackLng: 'pt-BR',
         debug: false,
         interpolation: {
             escapeValue: false // not needed for react as it escapes by default
         },
         detection: {
-            order: ['querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+            order: ['localStorage', 'cookie', 'querystring'],
             caches: ['localStorage', 'cookie']
         }
     });

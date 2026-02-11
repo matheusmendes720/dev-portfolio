@@ -1,3 +1,35 @@
+# 🚀 Fast Deployment Guide
+
+## Quick Deploy (Recommended)
+
+For rapid deployment from development to production:
+
+```powershell
+# Quick save your current work
+.\scripts\quick-save.ps1 "What changed"
+
+# Fast deploy to production
+.\scripts\deploy.ps1 -Message "Deploy: new feature"
+```
+
+That's it! The script handles everything:
+
+- ✅ Commits any uncommitted changes
+- ✅ Runs build test
+- ✅ Merges versioning → main
+- ✅ Pushes to production (triggers Netlify)
+- ✅ Logs to LEARNING_LOG.md
+- ✅ Creates backup tags
+
+**Or use the workflow command:**
+
+```powershell
+# To follow the manual step-by-step workflow
+# See .agent/workflows/deploy.md
+```
+
+---
+
 # CI/CD pipeline — Remote repo → Netlify
 
 ## 1. Create the remote repo

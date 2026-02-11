@@ -51,9 +51,10 @@ const Hero = () => {
                 <h1 id="hero-headline" dangerouslySetInnerHTML={{ __html: text || phrases[0] }}></h1>
                 <div className="neon-accent-line" id="neon-line"></div>
                 <div className="hero-sub">
-                    <Trans i18nKey="hero.sub">
-                        Architecting autonomous AI agents and data pipelines. Specialized in <span style={{ color: 'var(--accent-primary)' }}>LLM orchestration</span> and real-time infrastructure. Turning research into production-grade impact.
-                    </Trans>
+                    <Trans
+                        i18nKey="hero.sub"
+                        components={{ 1: <span style={{ color: 'var(--accent-primary)' }} /> }}
+                    />
                 </div>
             </div>
 
