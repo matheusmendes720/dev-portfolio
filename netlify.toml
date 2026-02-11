@@ -1,0 +1,16 @@
+# Netlify build & deploy — dev-portfolio
+# Connect this repo in Netlify; pushes to the deploy branch trigger builds.
+
+[build]
+  command   = "npm ci && npm run build"
+  publish   = "dist"
+  base      = "/"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA: all routes → index.html (optional; Netlify often detects Vite)
+[[redirects]]
+  from    = "/*"
+  to      = "/index.html"
+  status  = 200
