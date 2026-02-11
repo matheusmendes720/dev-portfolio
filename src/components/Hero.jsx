@@ -24,6 +24,26 @@ const Hero = () => {
         return () => { isMounted = false; };
     }, [counter, scramble, phrases]);
 
+    // Pulsing neon line effect
+    useEffect(() => {
+        const neonLine = document.getElementById('neon-line');
+        let time = 0;
+        let animationId;
+
+        const animatePulse = () => {
+            time += 0.005;
+            const pulse = (Math.sin(time * 2) + 1) / 2;
+            const width = 10 + (pulse * 90);
+            if (neonLine) {
+                neonLine.style.width = `${width}%`;
+            }
+            animationId = requestAnimationFrame(animatePulse);
+        };
+
+        animatePulse();
+        return () => cancelAnimationFrame(animationId);
+    }, []);
+
     return (
         <header>
             <div className="hero-meta">{t('hero.clearance')}</div>
@@ -105,7 +125,7 @@ const Hero = () => {
 
                 .neon-accent-line {
                     height: 2px;
-                    width: var(--neon-width, 40%);
+                    width: 0%;
                     background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
                     box-shadow: 0 0 15px var(--accent-primary);
                     margin-bottom: 2rem;

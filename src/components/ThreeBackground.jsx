@@ -26,37 +26,33 @@ const ThreeBackground = () => {
             uniform vec2 u_resolution;
             uniform vec2 u_mouse;
 
+            vec3 palette( float t ) {
+                // Deep Indigo to Teal shifts
+                vec3 a = vec3(0.5, 0.5, 0.5); 
+                vec3 b = vec3(0.5, 0.5, 0.5); 
+                vec3 c = vec3(1.0, 1.0, 1.0); 
+                vec3 d = vec3(0.50, 0.20, 0.25); 
+                return a + b*cos( 6.28318*(c*t+d) );
+            }
+
             void main() {
-                vec2 uv = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / min(u_resolution.y, u_resolution.x);
+                vec2 uv = (gl_FragCoord.xy * 2.0 - u_resolution.xy) / u_resolution.y;
+                vec2 uv0 = uv;
+                vec3 finalColor = vec3(0.0);
                 
-                // Add mouse interaction influence 
-                uv += (u_mouse - 0.5) * 0.2;
-
-                float time = u_time * 0.5;
+                uv += (u_mouse * 0.04);
                 
-                // Plasma calculations
-                float v1 = sin(uv.x * 10.0 + time);
-                float v2 = sin(10.0 * (uv.x * sin(time / 2.0) + uv.y * cos(time / 3.0)) + time);
-                float cx = uv.x + 0.5 * sin(time / 5.0);
-                float cy = uv.y + 0.5 * cos(time / 3.0);
-                float v3 = sin(sqrt(100.0 * (cx * cx + cy * cy) + 1.0) + time);
-                float v = v1 + v2 + v3;
-
-                // Color mapping
-                vec3 col;
-                col.r = sin(v * 3.14159);
-                col.g = sin(v * 3.14159 + 2.0 * 3.14159 / 3.0);
-                col.b = sin(v * 3.14159 + 4.0 * 3.14159 / 3.0);
+                for (float i = 0.0; i < 3.0; i++) {
+                    uv = fract(uv * 1.5) - 0.5;
+                    float d = length(uv) * exp(-length(uv0));
+                    vec3 col = palette(length(uv0) + i*.4 + u_time*.4);
+                    d = sin(d*8. + u_time)/8.0;
+                    d = abs(d);
+                    d = pow(0.01 / d, 1.2);
+                    finalColor += col * d;
+                }
                 
-                // Adjust colors for the "agentic" theme (indigo/teal/neon)
-                col = mix(col, vec3(0.05, 0.0, 0.15), 0.5); // Blend with deep indigo
-                col *= vec3(0.4, 0.8, 1.0); // Tint towards teal/cyan
-                
-                // Darken the background and add contrast
-                float intensity = pow(0.5 + 0.5 * sin(v), 2.0);
-                vec3 finalColor = col * intensity * 0.25;
-
-                gl_FragColor = vec4(finalColor, 1.0);
+                gl_FragColor = vec4(finalColor * 0.12, 1.0);
             }
         `;
 
