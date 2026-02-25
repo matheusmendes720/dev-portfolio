@@ -107,3 +107,29 @@ Each entry should include:
 3. **Include context** - future you will thank present you
 4. **Link to commits** - makes it easy to see what actually changed
 5. **Review periodically** - patterns emerge over time
+
+### fevereiro 11, 2026 - 09:19 
+
+**Type**: LEARNING  
+**Description**: Successfully set up fast deployment workflow
+
+**Outcome**: Success ✅
+**Lessons Learned**:
+Automation scripts reduce deployment friction and enable fearless experimentation
+**Commit**: [3696074](https://github.com/matheusmendes720/dev-portfolio/commit/3696074)  
+**Branch**: versioning
+
+---
+
+### fevereiro 11, 2026 - 09:43 
+
+**Type**: DEPLOY  
+**Description**: Successfully deployed dev-portfolio to Netlify production
+
+**Outcome**: Success ✅
+**Lessons Learned**:
+Netlify CLI makes deployment super easy. Site is live at https://dev-portfolio-7479.netlify.app
+**Commit**: [3696074](https://github.com/matheusmendes720/dev-portfolio/commit/3696074)  
+**Branch**: versioning
+
+---

@@ -1,11 +1,48 @@
+@import "tailwindcss";
+@source "../index.html";
+@source "../src/**/*.{js,jsx,ts,tsx}";
+
+/* ─── Tailwind v4 Theme Configuration ─── */
+@theme {
+  /* Custom Colors */
+  --color-neon-purple: #8b5cf6;
+  --color-neon-green: #10b981;
+  --color-neon-blue: #3b82f6;
+  --color-cyber-void: #030308;
+
+  --color-glass-100: rgba(255, 255, 255, 0.1);
+  --color-glass-200: rgba(255, 255, 255, 0.2);
+  --color-glass-300: rgba(255, 255, 255, 0.3);
+
+  /* Custom Fonts */
+  --font-display: "Courier New", monospace;
+  --font-mono: "Fira Code", monospace;
+
+  /* Custom Animations */
+  --animate-aurora: aurora 6s linear infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes aurora {
+    0% {
+      background-position: 0% 50%;
+    }
+
+    50% {
+      background-position: 100% 50%;
+    }
+
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+}
+
+/* ─── CSS Custom Properties (non-Tailwind) ─── */
 :root {
-  /* Updated Palette: Deep Indigo to Teal */
   --bg-color: #030308;
   --text-color: #e0e6ed;
   --accent-primary: #00d2ff;
-  /* Teal/Cyan */
   --accent-secondary: #7000ff;
-  /* Deep Indigo/Purple */
   --accent-glow: #00d2ff;
   --card-bg: rgba(10, 10, 18, 0.7);
   --border-color: rgba(255, 255, 255, 0.08);
@@ -50,6 +87,7 @@ body {
   0% {
     background-position: 0 0;
   }
+
   100% {
     background-position: 0 4px;
   }
@@ -82,13 +120,16 @@ body {
 ::-webkit-scrollbar {
   width: 5px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-color);
 }
+
 ::-webkit-scrollbar-thumb {
   background: var(--accent-secondary);
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-primary);
 }

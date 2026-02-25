@@ -5,14 +5,15 @@ const ThreeBackground = () => {
     const containerRef = useRef();
 
     useEffect(() => {
-        if (!containerRef.current) return;
+        const container = containerRef.current;
+        if (!container) return;
 
         const scene = new THREE.Scene();
         const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
         const renderer = new THREE.WebGLRenderer({ alpha: true });
 
         renderer.setSize(window.innerWidth, window.innerHeight);
-        containerRef.current.appendChild(renderer.domElement);
+        container.appendChild(renderer.domElement);
 
         const geometry = new THREE.PlaneGeometry(2, 2);
         const uniforms = {
@@ -52,7 +53,7 @@ const ThreeBackground = () => {
                     finalColor += col * d;
                 }
                 
-                gl_FragColor = vec4(finalColor * 0.12, 1.0);
+                gl_FragColor = vec4(finalColor * 0.06, 1.0);
             }
         `;
 
@@ -106,8 +107,8 @@ const ThreeBackground = () => {
             renderer.dispose();
             geometry.dispose();
             material.dispose();
-            if (containerRef.current) {
-                containerRef.current.removeChild(renderer.domElement);
+            if (container) {
+                container.removeChild(renderer.domElement);
             }
         };
     }, []);
@@ -123,7 +124,7 @@ const ThreeBackground = () => {
                 width: '100%',
                 height: '100%',
                 zIndex: -2,
-                opacity: 0.8,
+                opacity: 0.4,
                 pointerEvents: 'none'
             }}
         />

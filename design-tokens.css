@@ -1,0 +1,25 @@
+/**
+ * dev-portfolio — Design tokens (canonical)
+ * Source of truth: STYLES-GUIDE.md
+ * Use these variables everywhere; do not hardcode colors outside this file.
+ */
+
+:root {
+  --bg-color: #030308;
+  --text-color: #e0e6ed;
+  --accent-primary: #00d2ff;
+  --accent-secondary: #7000ff;
+  --accent-glow: #00d2ff;
+  --card-bg: rgba(10, 10, 18, 0.7);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --font-display: 'Syncopate', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+  --easing: cubic-bezier(0.19, 1, 0.22, 1);
+
+  /* Semantic (from guide) */
+  --text-muted: rgba(255, 255, 255, 0.55);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --glow-primary: rgba(0, 210, 255, 0.15);
+  --glow-secondary: rgba(112, 0, 255, 0.15);
+}

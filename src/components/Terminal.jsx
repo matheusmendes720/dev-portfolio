@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const Terminal = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const [history, setHistory] = useState([
         { type: 'output', content: t('terminal.welcome') },
         { type: 'output', content: t('terminal.help_msg') },
@@ -27,6 +29,12 @@ const Terminal = () => {
 
             if (cmd === 'clear') {
                 setHistory([]);
+            } else if (cmd === 'intel') {
+                // Secret command — authenticate and redirect
+                newHistory.push({ type: 'success', content: '🔓 Access granted. Redirecting to classified area...' });
+                setHistory(newHistory);
+                sessionStorage.setItem('__sg_auth', 'true');
+                setTimeout(() => navigate('/contest_calendar'), 800);
             } else if (commands[cmd]) {
                 newHistory.push({ type: 'success', content: commands[cmd] });
                 setHistory(newHistory);

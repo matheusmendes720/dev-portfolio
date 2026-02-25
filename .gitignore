@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local Netlify folder
+.netlify
+
+# Playwright
+test-results/
+playwright-report/
+test_out.txt
+
+# Cursor
+.cursor/
