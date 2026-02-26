@@ -1,6 +1,9 @@
-# Netlify build & deploy — dev-portfolio
-# Connect this repo in Netlify; pushes to the deploy branch trigger builds.
+# ═══════════════════════════════════════════════════
+# Netlify Configuration — dev-portfolio
+# Industry-grade: security headers, caching, branch deploys
+# ═══════════════════════════════════════════════════
 
+# ── Build Settings ────────────────────────────────
 [build]
   command   = "npm ci && npm run build"
   publish   = "dist"
@@ -9,8 +12,87 @@
 [build.environment]
   NODE_VERSION = "20"
 
-# SPA: all routes → index.html (optional; Netlify often detects Vite)
+
+# ── Production Context (main branch) ─────────────
+[context.production]
+  command = "npm ci && npm run build"
+
+[context.production.environment]
+  NODE_ENV = "production"
+
+
+# ── Branch Deploy Context (versioning = staging) ──
+[context.versioning]
+  command = "npm ci && npm run build"
+
+[context.versioning.environment]
+  NODE_ENV = "staging"
+
+
+# ── Deploy Preview Context (PRs) ─────────────────
+[context.deploy-preview]
+  command = "npm ci && npm run build"
+
+[context.deploy-preview.environment]
+  NODE_ENV = "preview"
+
+
+# ═══════════════════════════════════════════════════
+# SPA Routing — all routes → index.html
+# ═══════════════════════════════════════════════════
 [[redirects]]
-  from    = "/*"
-  to      = "/index.html"
-  status  = 200
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+
+# ═══════════════════════════════════════════════════
+# Security Headers — applied to all pages
+# ═══════════════════════════════════════════════════
+[[headers]]
+  for = "/*"
+
+  [headers.values]
+    # Prevent clickjacking
+    X-Frame-Options        = "DENY"
+
+    # Block MIME-type sniffing
+    X-Content-Type-Options = "nosniff"
+
+    # Control referrer information
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+    # Restrict browser features
+    Permissions-Policy     = "camera=(), microphone=(), geolocation=(), payment=()"
+
+    # Strict Transport Security (HTTPS only)
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+    # Content Security Policy — adjust as needed
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https:;"
+
+
+# ═══════════════════════════════════════════════════
+# Cache Control — immutable hashed assets
+# ═══════════════════════════════════════════════════
+[[headers]]
+  for = "/assets/*"
+
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+
+# ═══════════════════════════════════════════════════
+# Build Plugins
+# ═══════════════════════════════════════════════════
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+  [plugins.inputs]
+    output_path = "lighthouse-reports"

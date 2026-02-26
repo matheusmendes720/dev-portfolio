@@ -110,7 +110,7 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "❌ Merge failed! Resolving conflicts..." -ForegroundColor Red
     Write-Host "Please resolve conflicts manually, then run:" -ForegroundColor Yellow
     Write-Host "  git add ." -ForegroundColor White
-    Write-Host "  git commit -m '$Message'" -ForegroundColor White
+    Write-Host "  git commit -m `"$Message`"" -ForegroundColor White
     Write-Host "  git push origin main" -ForegroundColor White
     Write-Host "  git checkout versioning" -ForegroundColor White
     exit 1

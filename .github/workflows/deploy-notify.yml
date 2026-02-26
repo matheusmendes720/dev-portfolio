@@ -1,0 +1,70 @@
+name: Deploy Status
+
+on:
+  # Trigger after CI completes on main
+  workflow_run:
+    workflows: ["CI — Lint, Build & Test"]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  notify:
+    name: 📢 Update Deploy Status
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Post deployment status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: deployment } = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.workflow_run.head_sha,
+              environment: 'production',
+              description: 'Netlify production deploy',
+              auto_merge: false,
+              required_contexts: [],
+            });
+
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.id,
+              state: 'success',
+              environment_url: 'https://dev-portfolio-7479.netlify.app',
+              description: 'Deployed to Netlify',
+            });
+
+            core.info(`✅ Deployment status created for ${context.payload.workflow_run.head_sha}`);
+
+  notify-failure:
+    name: ❌ CI Failed
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+
+    steps:
+      - name: Post failure status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: deployment } = await github.rest.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: context.payload.workflow_run.head_sha,
+              environment: 'production',
+              description: 'CI failed — deploy blocked',
+              auto_merge: false,
+              required_contexts: [],
+            });
+
+            await github.rest.repos.createDeploymentStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              deployment_id: deployment.id,
+              state: 'failure',
+              description: 'CI pipeline failed — deploy blocked',
+            });
+
+            core.warning(`❌ CI failed for ${context.payload.workflow_run.head_sha}`);
