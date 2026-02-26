@@ -2,13 +2,13 @@
 # Deploys from versioning branch to main (production)
 
 param(
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [string]$Message = "Deploy: updates from versioning",
     
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [switch]$DryRun = $false,
     
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [switch]$SkipBuild = $false
 )
 
@@ -126,6 +126,17 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "✅ Successfully pushed to production!" -ForegroundColor Green
+
+# Deploy to Netlify via CLI (belt-and-suspenders)
+Write-Host "`n🌐 Deploying to Netlify via CLI..." -ForegroundColor Yellow
+$netlifyResult = npx netlify-cli deploy --prod --dir=dist --no-build --skip-functions-cache 2>&1
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "✅ Netlify deploy successful!" -ForegroundColor Green
+}
+else {
+    Write-Host "⚠️  Netlify CLI deploy skipped (not logged in or site not linked)." -ForegroundColor Yellow
+    Write-Host "   Run 'npx netlify-cli login' to authenticate." -ForegroundColor Yellow
+}
 
 # Return to versioning
 Write-Host "`n🔙 Returning to versioning branch..." -ForegroundColor Yellow
