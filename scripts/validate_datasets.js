@@ -38,7 +38,6 @@ async function validate() {
         // Validation Checks
         let missingDates = 0;
         let missingUrls = 0;
-        let implausibleDates = 0;
 
         rows.forEach((row, index) => {
             // Check Dates
@@ -46,7 +45,6 @@ async function validate() {
                 missingDates++;
             } else if (new Date(row.date_start).toString() === 'Invalid Date') {
                 console.warn(`  ! Row ${index + 2}: Invalid date_start "${row.date_start}"`);
-                implausibleDates++;
             }
 
             // Check URLs

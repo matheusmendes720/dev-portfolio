@@ -4,7 +4,7 @@ import ThreeBackground from './ThreeBackground';
 
 const Layout = ({ children }) => {
     const location = useLocation();
-    const isCleanPage = location.pathname === '/contest_calendar';
+    const isCleanPage = location.pathname.startsWith('/contest_calendar');
 
     return (
         <>

@@ -4,6 +4,109 @@
 
 export const EVENTS = [
     {
+        "id": "HK_LOWHACK",
+        "title": "Low Hack 2026",
+        "tier": "S",
+        "type": "Online",
+        "date": "2026-04-18",
+        "endDate": "2026-04-19",
+        "prizePool": 5000,
+        "cost": "Free",
+        "numericCost": 0,
+        "roiScore": 90,
+        "urgencyScore": 50,
+        "daysToStart": 19,
+        "location": "Online",
+        "coordinates": null,
+        "organizer": "Low",
+        "description": "Waste Guardian - B2B ODS 9/12 Copilot.",
+        "tags": [
+            "mendix",
+            "low-code",
+            "siemens",
+            "genai"
+        ],
+        "status": "ongoing",
+        "link": "#"
+    },
+    {
+        "id": "HK_LIGA_JOVEM",
+        "title": "Desafio Liga Jovem",
+        "tier": "A",
+        "type": "Online",
+        "date": "2026-03-27",
+        "endDate": "2026-05-28",
+        "prizePool": 10000,
+        "cost": "Free",
+        "numericCost": 0,
+        "roiScore": 100,
+        "urgencyScore": 75,
+        "daysToStart": -3,
+        "location": "Online",
+        "coordinates": null,
+        "organizer": "Desafio",
+        "description": "ESG/Community problem solving for students.",
+        "tags": [
+            "sebrae",
+            "social",
+            "impact",
+            "esg"
+        ],
+        "status": "ongoing",
+        "link": "#"
+    },
+    {
+        "id": "HK_REPLY_AI",
+        "title": "Reply AI Agent Challenge",
+        "tier": "S",
+        "type": "Online",
+        "date": "2026-04-16",
+        "endDate": "2026-04-16",
+        "prizePool": 15000,
+        "cost": "Free",
+        "numericCost": 0,
+        "roiScore": 100,
+        "urgencyScore": 75,
+        "daysToStart": 17,
+        "location": "Online",
+        "coordinates": null,
+        "organizer": "Reply",
+        "description": "AI Agent fraud detection challenge.",
+        "tags": [
+            "ai",
+            "agents",
+            "langfuse",
+            "crewai"
+        ],
+        "status": "upcoming",
+        "link": "#"
+    },
+    {
+        "id": "SENAI_NAC_2026",
+        "title": "GP SENAI Nacional 2026",
+        "tier": "S",
+        "type": "Presencial",
+        "date": "2026-03-02",
+        "endDate": "2026-05-05",
+        "prizePool": 20000,
+        "cost": "Free",
+        "numericCost": 0,
+        "roiScore": 100,
+        "urgencyScore": 0,
+        "daysToStart": -28,
+        "location": "Camaçari, Brazil",
+        "coordinates": null,
+        "organizer": "GP",
+        "description": "Cybersecurity & Digital Ethics grand prize.",
+        "tags": [
+            "senai",
+            "cybersecurity",
+            "ethics"
+        ],
+        "status": "ongoing",
+        "link": "#"
+    },
+    {
         "id": "CP01",
         "title": "Meta Hacker Cup 2026",
         "tier": "S",
@@ -488,23 +591,25 @@ export const EVENTS = [
     },
     {
         "id": "CP22",
-        "title": "Grand Prix SENAI de Inovação",
+        "title": "GP Regional SENAI (INDEX Bahia)",
         "tier": "B",
         "type": "Presencial",
-        "date": "2026-10-01",
-        "endDate": "2026-11-30",
-        "prizePool": 0,
+        "date": "2026-03-02",
+        "endDate": "2026-05-08",
+        "prizePool": 5000,
         "cost": "Free",
         "numericCost": 0,
-        "roiScore": 0,
-        "urgencyScore": 25,
-        "daysToStart": 229,
+        "roiScore": 80,
+        "urgencyScore": 50,
+        "daysToStart": -28,
         "location": "Salvador, Brazil",
         "coordinates": null,
-        "organizer": "Grand",
-        "description": "3",
+        "organizer": "GP",
+        "description": "Industrial Transformation (Bahia Focus).",
         "tags": [
-            "algorithmic"
+            "senai",
+            "industry",
+            "bahia"
         ],
         "status": "upcoming",
         "link": "#"
@@ -2735,6 +2840,46 @@ export const EVENTS = [
         ],
         "status": "active",
         "link": "#"
+    },
+    {
+        "id": "HK_LIGA_JOVEM",
+        "title": "Desafio Liga Jovem (Sebrae)",
+        "tier": "A",
+        "type": "Presencial",
+        "date": "2026-03-26",
+        "endDate": "2026-12-31",
+        "prizePool": 50000,
+        "cost": "Free",
+        "numericCost": 0,
+        "roiScore": 100,
+        "urgencyScore": 50,
+        "daysToStart": 0,
+        "location": "Brasil (Nacional)",
+        "organizer": "Sebrae",
+        "description": "Empreendedorismo de impacto — Missão internacional para vencedores — 4ª Edição",
+        "tags": ["startup", "innovation", "esg"],
+        "status": "active",
+        "link": "https://www.desafioligajovem.com.br/"
+    },
+    {
+        "id": "HK_REPLY_AI",
+        "title": "Reply AI Agent Challenge 2026",
+        "tier": "S",
+        "type": "Online",
+        "date": "2026-04-16",
+        "endDate": "2026-04-16",
+        "prizePool": 10000,
+        "cost": "Free",
+        "numericCost": 0,
+        "roiScore": 100,
+        "urgencyScore": 100,
+        "daysToStart": 21,
+        "location": "Online",
+        "organizer": "Reply",
+        "description": "MirrorPay 2087 — Multi-agent fraud detection — Langfuse mandatory",
+        "tags": ["ai_agents", "python", "reasoning"],
+        "status": "active",
+        "link": "https://challenges.reply.com/"
     }
 ];
 
@@ -2758,12 +2903,14 @@ export const CATEGORY_COLORS = {
 
 export const TIER_COLORS = {
     'S': '#8b5cf6', // Neon Purple
-    'A': '#10b981', // Neon Green
-    'B': '#3b82f6', // Neon Blue
-    'C': '#718096'  // Slate
+    'A': '#3b82f6', // Neon Blue
+    'B': '#10b981', // Neon Green
+    'C': '#f59e0b', // Amber
+    'D': '#ef4444', // Red
 };
 
 export const TYPE_COLORS = {
     'Presencial': '#27c93f',
     'Online': '#00d2ff'
 };
+

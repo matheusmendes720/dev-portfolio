@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isToday, format } from 'date-fns';
+import { parseYYYYMMDD } from '../../utils/dateUtils';
 import CalendarEventPill from './CalendarEventPill';
 
 const CalendarGrid = ({ currentDate, events, onEventClick, onDateClick, selectedDate }) => {
@@ -43,12 +44,12 @@ const CalendarGrid = ({ currentDate, events, onEventClick, onDateClick, selected
                     const isSelected = selectedDate && isSameDay(day, selectedDate);
 
                     // Filter events for this day
-                    const dayEvents = events.filter(evt => isSameDay(new Date(evt.date), day));
+                    const dayEvents = events.filter(evt => isSameDay(parseYYYYMMDD(evt.date), day));
 
                     return (
                         <div
                             key={day.toString()}
-                            data-testid={`day-cell-${day.toISOString().split('T')[0]}`}
+                            data-testid={`day-cell-${format(day, 'yyyy-MM-dd')}`}
                             onClick={() => {
                                 if (isCurrentMonth && onDateClick) onDateClick(day);
                             }}

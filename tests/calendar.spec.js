@@ -58,6 +58,7 @@ test.describe('Suite 2: Layout & Structure', () => {
     });
 
     test('should render 3-column layout with sidebar, year view, and panel area', async ({ page }) => {
+        await page.getByTestId('btn-view-year').click();
         await expect(page.getByTestId('left-sidebar')).toBeVisible();
         await expect(page.getByTestId('year-view')).toBeVisible();
         await expect(page.getByTestId('stats-widget')).toBeVisible();
@@ -100,7 +101,7 @@ test.describe('Suite 3: Filter Widget', () => {
 
     test('WHEN S-Tier filter clicked THEN event count reduces and stats update', async ({ page }) => {
         // Get initial count
-        const totalBefore = await page.getByTestId('stat-total').textContent();
+        const totalBefore = await page.getByTestId('stat-total').textContent() || '';
         const countBefore = parseInt(totalBefore.replace(/\D/g, ''));
 
         // Click S-Tier filter
@@ -108,7 +109,7 @@ test.describe('Suite 3: Filter Widget', () => {
         await page.waitForTimeout(500); // wait for re-render
 
         // Count should be smaller
-        const totalAfter = await page.getByTestId('stat-total').textContent();
+        const totalAfter = await page.getByTestId('stat-total').textContent() || '';
         const countAfter = parseInt(totalAfter.replace(/\D/g, ''));
         expect(countAfter).toBeLessThan(countBefore);
         expect(countAfter).toBeGreaterThan(0);
@@ -192,14 +193,8 @@ test.describe('Suite 4: Sort Controls', () => {
     });
 
     test('WHEN sort by urgency clicked THEN sidebar events reorder', async ({ page }) => {
-        // Get first sidebar event title in date order
-        const firstDateOrder = await page.locator('[data-testid^="sidebar-event-"]').first().textContent();
-
         await page.getByTestId('btn-sort-urgency').click();
         await page.waitForTimeout(500);
-
-        // Get first event in urgency order
-        const firstUrgencyOrder = await page.locator('[data-testid^="sidebar-event-"]').first().textContent();
 
         // Order likely changed (not guaranteed but very probable)
         // Just verify no crash and elements still exist
@@ -487,6 +482,10 @@ test.describe('Suite 10: Integration Flow', () => {
     });
 
     test('full workflow: filter → sort → navigate → select → close', async ({ page }) => {
+        // Switch to month view for navigation title assertions
+        await page.getByTestId('btn-view-month').click();
+        await page.waitForTimeout(500);
+
         // 1. Apply S-Tier filter
         await page.getByTestId('filter-tier_s').click();
         await page.waitForTimeout(300);

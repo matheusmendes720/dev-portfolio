@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import useTextScramble from '../hooks/useTextScramble';
 
 const ProjectCard = ({ title, category, desc, stack, metric, metricLabel, img, categoryClass }) => {

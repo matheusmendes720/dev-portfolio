@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Clock, MapPin, Trophy, TrendingUp, AlertCircle, DollarSign, ExternalLink, Tag, Calendar } from 'lucide-react';
 import { format, isSameDay } from 'date-fns';
+import { parseYYYYMMDD } from '../../utils/dateUtils';
 import { TIER_COLORS } from '../../data/contestData';
 import ButtonGlass from '../glass/ButtonGlass';
 
@@ -14,7 +15,7 @@ const RightAnnotationPanel = ({
 }) => {
     // Get events for the selected date
     const dateEvents = selectedDate
-        ? events.filter(evt => evt.date && isSameDay(new Date(evt.date), selectedDate))
+        ? events.filter(evt => evt.date && isSameDay(parseYYYYMMDD(evt.date), selectedDate))
         : [];
 
     // Show event detail or date overview
@@ -52,7 +53,7 @@ const RightAnnotationPanel = ({
 
                 {/* Content */}
                 <div className="flex-1 overflow-y-auto scrollbar-hide">
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence>
                         {showEventDetail && (
                             <EventDetailView key="event" event={selectedEvent} />
                         )}
@@ -77,7 +78,7 @@ const RightAnnotationPanel = ({
 // ─── Event Detail View ───
 const EventDetailView = ({ event }) => {
     const tierColor = TIER_COLORS[event.tier] || TIER_COLORS['C'];
-    const urgencyColor = event.urgencyScore >= 75 ? '#ff003c' : (event.urgencyScore >= 50 ? '#f9ca24' : '#3b82f6');
+
 
     return (
         <motion.div

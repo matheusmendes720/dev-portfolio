@@ -9,6 +9,9 @@ import Terminal from './components/Terminal';
 import Footer from './components/Footer';
 import SecretGate from './components/SecretGate';
 import ContestCalendar from './pages/ContestCalendar';
+import CommandCenter from './pages/CommandCenter';
+import { SubscriptionProvider } from './context/SubscriptionContext';
+import { FEATURE_FLAGS } from './utils/featureFlags';
 
 function HomePage() {
   return (
@@ -26,16 +29,23 @@ function HomePage() {
 
 function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/contest_calendar" element={
-          <SecretGate>
-            <ContestCalendar />
-          </SecretGate>
-        } />
-      </Routes>
-    </Layout>
+    <SubscriptionProvider>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/contest_calendar" element={
+            <SecretGate>
+              <ContestCalendar />
+            </SecretGate>
+          } />
+          <Route path="/contest_calendar/command" element={
+            <SecretGate>
+              <CommandCenter />
+            </SecretGate>
+          } />
+        </Routes>
+      </Layout>
+    </SubscriptionProvider>
   );
 }
 

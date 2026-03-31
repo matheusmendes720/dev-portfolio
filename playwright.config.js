@@ -1,6 +1,6 @@
 import { defineConfig } from '@playwright/test';
 
-const isCI = !!process.env.CI;
+const isCI = !!process.env.CI; // eslint-disable-line no-undef
 
 export default defineConfig({
     testDir: './tests',

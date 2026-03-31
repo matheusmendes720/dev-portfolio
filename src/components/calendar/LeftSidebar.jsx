@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ChevronLeft, ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
-import { format, isSameDay, isToday, isTomorrow, isSameMonth } from 'date-fns';
+import { format, isToday, isTomorrow } from 'date-fns';
+import { parseYYYYMMDD } from '../../utils/dateUtils';
 import { TIER_COLORS } from '../../data/contestData';
 import MiniMonthGrid from './MiniMonthGrid';
 
@@ -13,7 +14,6 @@ const LeftSidebar = ({
     selectedDate,
     onDateClick,
     onEventClick,
-    onMonthChange,
 }) => {
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,7 +36,7 @@ const LeftSidebar = ({
 
         const groups = {};
         sorted.forEach(evt => {
-            const evtDate = new Date(evt.date);
+            const evtDate = parseYYYYMMDD(evt.date);
             let label;
             if (isToday(evtDate)) {
                 label = `TODAY ${format(evtDate, 'dd/MM')}`;
@@ -138,7 +138,7 @@ const LeftSidebar = ({
                                                         {evt.title}
                                                     </div>
                                                     <div className="text-[10px] text-gray-500 font-mono mt-0.5">
-                                                        {evt.date && format(new Date(evt.date), 'h:mm a')} • {evt.location}
+                                                        {evt.date && format(parseYYYYMMDD(evt.date), 'h:mm a')} • {evt.location}
                                                     </div>
                                                 </div>
                                                 {/* Tier badge */}

@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import ProjectCard from './ProjectCard';
 import useTextScramble from '../hooks/useTextScramble';

@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import useTextScramble from '../hooks/useTextScramble';
 
 const Hero = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const phrases = useMemo(() => t('hero.phrases', { returnObjects: true }) || ['Agentic Systems Architecture', 'Production AI Engineer', 'Data Pipeline Architect'], [t]);
     const { text, scramble } = useTextScramble();
     const [counter, setCounter] = useState(0);

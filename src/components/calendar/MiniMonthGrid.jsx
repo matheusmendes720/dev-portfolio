@@ -1,4 +1,5 @@
-import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isToday, format, getDay } from 'date-fns';
+import { startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isSameDay, isToday, format } from 'date-fns';
+import { parseYYYYMMDD } from '../../utils/dateUtils';
 
 const MiniMonthGrid = ({ month, year, events = [], selectedDate, onDateClick, onMonthClick, compact = false }) => {
     const currentMonth = new Date(year, month, 1);
@@ -13,7 +14,7 @@ const MiniMonthGrid = ({ month, year, events = [], selectedDate, onDateClick, on
     // Count events per day for density
     const getEventCount = (day) => {
         return events.filter(evt => {
-            const evtDate = new Date(evt.date);
+            const evtDate = parseYYYYMMDD(evt.date);
             return isSameDay(evtDate, day);
         }).length;
     };

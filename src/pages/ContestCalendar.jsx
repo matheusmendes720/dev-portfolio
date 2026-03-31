@@ -1,9 +1,12 @@
 
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { subMonths, setMonth, setYear } from 'date-fns';
+import { addMonths, subMonths } from 'date-fns';
+import { Link } from 'react-router-dom';
+import { Zap } from 'lucide-react';
 
 import { EVENTS } from '../data/contestData';
+import { useSubscriptions } from '../context/SubscriptionContext';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarGrid from '../components/calendar/CalendarGrid';
 import FilterWidget from '../components/calendar/FilterWidget';
@@ -13,10 +16,11 @@ import RightAnnotationPanel from '../components/calendar/RightAnnotationPanel';
 import YearView from '../components/calendar/YearView';
 
 const ContestCalendar = () => {
+    const { subscribedEvents } = useSubscriptions();
     // ─── Core State ───
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDate, setCurrentDate] = useState(new Date(2026, 0, 1));
     const [sortBy, setSortBy] = useState('date');
-
+    
     // ─── New UI State ───
     const [activeView, setActiveView] = useState('year'); // 'month' | 'year'
     const [selectedDate, setSelectedDate] = useState(null);
@@ -38,8 +42,8 @@ const ContestCalendar = () => {
     };
 
     // ─── Navigation Handlers ───
-    const onNextMonth = () => setCurrentDate(subMonths(currentDate, -1));
-    const onPrevMonth = () => setCurrentDate(subMonths(currentDate, 1));
+    const onNextMonth = () => setCurrentDate(prev => addMonths(prev, 1));
+    const onPrevMonth = () => setCurrentDate(prev => subMonths(prev, 1));
 
     // ─── Processing Logic (Filter -> Sort) ───
     const getProcessedEvents = () => {
@@ -133,6 +137,14 @@ const ContestCalendar = () => {
                         <div className="mb-6 flex-shrink-0">
                             <StatsWidget events={displayEvents} />
                         </div>
+
+                        {/* Command Center CTA */}
+                        {subscribedEvents.length > 0 && (
+                            <Link to="/contest_calendar/command" className="flex-shrink-0 mb-4 flex items-center gap-2 self-end px-4 py-2 rounded-lg border border-neon-purple/40 bg-neon-purple/10 text-neon-green text-xs font-mono font-bold uppercase tracking-widest hover:border-neon-purple hover:bg-neon-purple/20 transition-all group">
+                                <Zap size={12} className="animate-pulse" />
+                                COMMAND_CENTER ({subscribedEvents.length} missions)
+                            </Link>
+                        )}
 
                         {/* 2. Header & Controls */}
                         <div className="flex-shrink-0">

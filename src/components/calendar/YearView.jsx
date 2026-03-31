@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { parseYYYYMMDD } from '../../utils/dateUtils';
 import MiniMonthGrid from './MiniMonthGrid';
 
 const YearView = ({ year, events, selectedDate, onMonthClick, onDateClick }) => {
@@ -29,7 +30,7 @@ const YearView = ({ year, events, selectedDate, onMonthClick, onDateClick }) => 
                     // Filter events for this specific month
                     const monthEvents = events.filter(evt => {
                         if (!evt.date) return false;
-                        const d = new Date(evt.date);
+                        const d = parseYYYYMMDD(evt.date);
                         return d.getMonth() === month && d.getFullYear() === year;
                     });
 
