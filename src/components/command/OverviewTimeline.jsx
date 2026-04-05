@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useSubscriptions } from '../../context/SubscriptionContext';
+import { useSubscriptions } from '../../hooks/useSubscriptions';
 import { TIER_COLORS } from '../../data/contestData';
 
 /**
@@ -88,27 +88,74 @@ const OverviewTimeline = ({ range = 'Month', selectedId, onSelect }) => {
         <div className="w-full">
             <div className="relative min-w-[800px] pb-4">
                 
-                {/* Vertical Grid Lines */}
+                {/* Track Area Container — contains grid lines and today marker */}
                 <div className="absolute inset-0 left-44 pointer-events-none">
+                    {/* Vertical Grid Lines */}
                     {gridLines.map((pos, i) => (
                         <div key={i} 
                             className="absolute top-0 bottom-0 w-px border-l border-white/5 opacity-40" 
                             style={{ left: `${pos}%` }} 
                         />
                     ))}
-                </div>
-
-                {/* TODAY PULSE MARKER */}
-                <div 
-                    className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-neon-green via-neon-green to-transparent z-20 pointer-events-none left-44"
-                    style={{ left: `calc(44px + ${pct(now)}%)`, transform: 'translateX(-50%)' }}
-                >
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neon-green rounded-full blur-[2px] shadow-[0_0_10px_#10b981]" />
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full" />
+                    
+                    {/* TODAY PULSE MARKER */}
+                    <div
+                        className="absolute top-0 bottom-0 w-px bg-gradient-to-b from-neon-green via-neon-green to-transparent z-20"
+                        style={{ left: `${pct(now)}%`, transform: 'translateX(-50%)' }}
+                    >
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neon-green rounded-full blur-[2px] shadow-[0_0_10px_#10b981]" />
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full" />
+                    </div>
                 </div>
 
                 {/* Timeline Header (Axis) */}
                 <div className="relative h-10 mb-6 flex items-center border-b border-white/10 ml-44">
+                    {/* Week view: MON, TUE, WED, THU, FRI, SAT, SUN */}
+                    {range === 'Week' && Array.from({ length: 7 }, (_, i) => {
+                        const d = new Date(winStart);
+                        d.setDate(d.getDate() + i);
+                        const left = pct(d);
+                        return left >= 0 && left < 100 ? (
+                            <span key={i}
+                                className="absolute text-[8px] font-mono text-gray-600 uppercase tracking-tighter"
+                                style={{ left: `${left}%` }}
+                            >
+                                {d.toLocaleString('en', { weekday: 'short' }).toUpperCase()}
+                            </span>
+                        ) : null;
+                    })}
+
+                    {/* Month view: 01, 08, 15, 22 with month abbreviation */}
+                    {range === 'Month' && Array.from({ length: 4 }, (_, i) => {
+                        const d = new Date(winStart);
+                        d.setDate(d.getDate() + (i * 7));
+                        const left = pct(d);
+                        return left >= 0 && left < 100 ? (
+                            <span key={i}
+                                className="absolute text-[8px] font-mono text-gray-600 uppercase tracking-tighter"
+                                style={{ left: `${left}%` }}
+                            >
+                                {d.toLocaleDateString('en', { day: '2-digit', month: 'short' }).toUpperCase()}
+                            </span>
+                        ) : null;
+                    })}
+
+                    {/* Quarter view: month start markers with abbreviations */}
+                    {range === 'Quarter' && Array.from({ length: 3 }, (_, i) => {
+                        const d = new Date(winStart);
+                        d.setMonth(d.getMonth() + i, 1);
+                        const left = pct(d);
+                        return left >= 0 && left < 100 ? (
+                            <span key={i}
+                                className="absolute text-[8px] font-mono text-gray-600 uppercase tracking-tighter"
+                                style={{ left: `${left}%` }}
+                            >
+                                {d.toLocaleString('en', { month: 'short' })}
+                            </span>
+                        ) : null;
+                    })}
+
+                    {/* Year view: all 12 months (already implemented) */}
                     {range === 'Year' && Array.from({ length: 12 }, (_, i) => {
                         const d = new Date(winStart.getFullYear(), i, 1);
                         const left = pct(d);

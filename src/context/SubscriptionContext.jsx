@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { EVENTS } from '../data/contestData';
-
-const SubscriptionContext = createContext(null);
+import { SubscriptionContext } from './SubscriptionContextInternal';
 
 /**
  * Provides subscribed event state (persisted to localStorage) and
@@ -82,10 +81,4 @@ export const SubscriptionProvider = ({ children }) => {
             {children}
         </SubscriptionContext.Provider>
     );
-};
-
-export const useSubscriptions = () => {
-    const ctx = useContext(SubscriptionContext);
-    if (!ctx) throw new Error('useSubscriptions must be used within SubscriptionProvider');
-    return ctx;
 };

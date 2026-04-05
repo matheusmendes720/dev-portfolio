@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Zap } from 'lucide-react';
 
 import { EVENTS } from '../data/contestData';
-import { useSubscriptions } from '../context/SubscriptionContext';
+import { useSubscriptions } from '../hooks/useSubscriptions';
 import CalendarHeader from '../components/calendar/CalendarHeader';
 import CalendarGrid from '../components/calendar/CalendarGrid';
 import FilterWidget from '../components/calendar/FilterWidget';

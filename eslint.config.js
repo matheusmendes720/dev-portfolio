@@ -40,4 +40,17 @@ export default defineConfig([
       }],
     },
   },
+  {
+    files: ['scripts/**/*.js'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      globals: globals.node,
+    },
+    rules: {
+      'no-unused-vars': ['error', { 
+        varsIgnorePattern: '^[A-Z_]|motion|Icon',
+        argsIgnorePattern: '^[A-Z_]|motion|Icon'
+      }],
+    },
+  },
 ])

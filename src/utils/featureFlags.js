@@ -5,6 +5,7 @@
 
 export const FEATURE_FLAGS = {
   CONTEST_CALENDAR: import.meta.env.VITE_FEATURE_CONTEST_CALENDAR === 'true',
+  SECRET_GATE: import.meta.env.VITE_FEATURE_SECRET_GATE === 'true',
 };
 
 /**

@@ -11,12 +11,27 @@ test.describe('Feature Flag: Contest Calendar', () => {
         // Since we are running with the current .env (which should have the flag as true)
         await page.goto('/contest_calendar');
         
-        // It should show the Secret Gate (Restricted Access)
-        const gate = page.locator('#secret-gate');
-        await expect(gate).toBeVisible({ timeout: 10000 });
-        await expect(page.locator('.gate-title')).toContainText('RESTRICTED ACCESS');
+        // Since VITE_FEATURE_SECRET_GATE is false, gate is bypassed
+        // and calendar should be visible directly
+        const calendar = page.locator('.contest-calendar, [class*="calendar"]');
+        await expect(calendar).toBeVisible({ timeout: 10000 });
     });
 
     // Note: To test the "disabled" state, one would normally use a separate 
     // test run with a different environment configuration.
+});
+
+test.describe('Feature Flag: Secret Gate', () => {
+    test('gate is bypassed when feature flag is disabled', async ({ page }) => {
+        // The VITE_FEATURE_SECRET_GATE is set to false in .env
+        await page.goto('/contest_calendar');
+        
+        // The secret gate should NOT be visible (bypassed)
+        const gate = page.locator('#secret-gate');
+        await expect(gate).not.toBeVisible();
+        
+        // Calendar content should be visible directly
+        const calendarContent = page.locator('body');
+        await expect(calendarContent).not.toContainText('RESTRICTED ACCESS');
+    });
 });

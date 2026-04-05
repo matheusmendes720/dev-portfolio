@@ -3,34 +3,81 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, LayoutGrid, BarChart2, CheckSquare, Zap, Target, Cpu, Activity } from 'lucide-react';
 
-import { useSubscriptions } from '../context/SubscriptionContext';
+import { useSubscriptions } from '../hooks/useSubscriptions';
 import { COMPETITIONS_DATA } from '../data/competitionsData';
 import { TIER_COLORS } from '../data/contestData';
 import OverviewTimeline from '../components/command/OverviewTimeline';
 import MissionGantt from '../components/command/MissionGantt';
 import DeliverablesPanel from '../components/command/DeliverablesPanel';
+import { useEffect } from 'react';
 
 const RANGE_OPTIONS = ['Week', 'Month', 'Quarter', 'Year'];
 const GANTT_SCALES = ['day', 'week', 'month', 'quarter', 'year'];
 const GANTT_SCALE_LABELS = { day: 'Daily', week: 'Weekly', month: 'Monthly', quarter: 'Quarterly', year: 'Yearly' };
 
+/**
+ * K-03: Smart default scale based on total mission duration.
+ * Low Hack (~20 days) → week; Liga Jovem (~8 months) → month; etc.
+ */
+const getSmartDefaultScale = (phases = []) => {
+    if (!phases.length) return 'month';
+    const allMs = phases.flatMap(p => [new Date(p.start).getTime(), new Date(p.end).getTime()]);
+    const span  = (Math.max(...allMs) - Math.min(...allMs)) / 86_400_000; // days
+    if (span <= 21)  return 'day';
+    if (span <= 90)  return 'week';
+    if (span <= 270) return 'month';
+    return 'quarter';
+};
+
 const CommandCenter = () => {
     const { subscribedEvents, deliverables, toggleDeliverable } = useSubscriptions();
     const [selectedId, setSelectedId] = useState(() => subscribedEvents[0]?.id || null);
     const [timelineRange, setTimelineRange] = useState('Month');
-    const [ganttScale, setGanttScale] = useState('month');
+    // K-03: initial scale derived from first mission's phases
+    const [ganttScale, setGanttScale] = useState(() => {
+        const firstId   = subscribedEvents[0]?.id;
+        const firstData = firstId ? COMPETITIONS_DATA[firstId] : null;
+        return getSmartDefaultScale(firstData?.phases ?? []);
+    });
     const [activeTab, setActiveTab] = useState('gantt'); // 'gantt' | 'deliverables'
+    const [bffStatus, setBffStatus] = useState('INITIATING_SYNC...');
+
+    // K-03: Reset scale to smart default whenever a different mission is selected
+    const handleSelectMission = (id) => {
+        setSelectedId(id);
+        const data = COMPETITIONS_DATA[id];
+        if (data?.phases) setGanttScale(getSmartDefaultScale(data.phases));
+    };
+
+    useEffect(() => {
+        // BFF Intelligence Synchronizer
+        const syncBFF = async () => {
+            try {
+                const res = await fetch('/.netlify/functions/sync-intel');
+                if (res.ok) {
+                    const data = await res.json();
+                    setBffStatus(`SYNC_COMPLETE // NODE: ${data.intel_node}`);
+                } else {
+                    setBffStatus('SYNC_ERROR // OFFLINE_PROTOCOL');
+                }
+            } catch {
+                setBffStatus('SYNC_UNREACHABLE // LOCAL_CACHED');
+            }
+        };
+        syncBFF();
+    }, []);
 
     // Merge static COMPETITIONS_DATA with persistent user 'done' states
     const getEnrichedData = (id) => {
         const base = COMPETITIONS_DATA[id];
         if (!base) return null;
-        
+
         const userEventState = deliverables[id] || {};
         const phases = base.phases || [];
-        
+
         return {
             ...base,
+            eventId: id, // Ensure eventId matches the key used for storage lookup
             phases: phases.map(phase => ({
                 ...phase,
                 deliverables: (phase.deliverables || []).map(del => ({
@@ -62,7 +109,7 @@ const CommandCenter = () => {
                             <p className="text-[10px] font-mono text-gray-600 uppercase tracking-[0.3em] mb-0.5">Tactical_Intelligence_Node</p>
                             <div className="flex items-center gap-2">
                                 <div className="h-1.5 w-1.5 bg-neon-green rounded-full shadow-[0_0_8px_#10b981] animate-pulse" />
-                                <span className="text-[9px] font-mono text-neon-green/80 uppercase tracking-widest">SYSTEM_LIVE // PORT_8080</span>
+                                <span className="text-[9px] font-mono text-neon-green/80 uppercase tracking-widest">{bffStatus}</span>
                             </div>
                         </div>
                     </div>
@@ -122,7 +169,7 @@ const CommandCenter = () => {
                             {subscribedEvents.map((mission) => (
                                 <button
                                     key={mission.id}
-                                    onClick={() => setSelectedId(mission.id)}
+                                    onClick={() => handleSelectMission(mission.id)}
                                     className={`w-full group relative flex items-center gap-4 p-4 rounded-2xl border transition-all duration-500 text-left overflow-hidden ${
                                         selectedId === mission.id
                                         ? 'bg-white/5 border-neon-green/40 shadow-[0_0_30px_rgba(16,185,129,0.05)] scale-[1.02]'

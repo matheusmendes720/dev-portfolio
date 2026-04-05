@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
 import { TIER_COLORS } from '../../data/contestData';
-import { useSubscriptions } from '../../context/SubscriptionContext';
+import { useSubscriptions } from '../../hooks/useSubscriptions';
 
 const CalendarEventPill = ({ event, onClick }) => {
     const { isSubscribed, toggleSubscription } = useSubscriptions();

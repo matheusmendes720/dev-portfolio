@@ -58,7 +58,6 @@ async function migrate() {
     // Move specific note
     const notePath = path.join(targetDir, 'note-index.md');
     if (fs.existsSync(notePath)) {
-        let content = fs.readFileSync(notePath, 'utf8');
         // Rename appropriately and set the node pattern
         const newNotePath = path.join(targetDir, '02_Estrategia_Vencedora', '00_INDEX.md');
         fs.renameSync(notePath, newNotePath);

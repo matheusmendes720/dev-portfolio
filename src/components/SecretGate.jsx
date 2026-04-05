@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isFeatureEnabled } from '../utils/featureFlags';
 
 const SECRET_KEY = 'intel';
 const SESSION_KEY = '__sg_auth';
 
 const SecretGate = ({ children }) => {
+    const isGateEnabled = isFeatureEnabled('SECRET_GATE');
     const [authenticated, setAuthenticated] = useState(
-        () => sessionStorage.getItem(SESSION_KEY) === 'true'
+        () => !isGateEnabled || sessionStorage.getItem(SESSION_KEY) === 'true'
     );
     const [input, setInput] = useState('');
     const [attempts, setAttempts] = useState([]);

@@ -167,6 +167,9 @@ const PhaseCard = ({ phase, index, onToggle }) => {
 const DeliverablesPanel = ({ competitionData, onDeliverableToggle }) => {
     if (!competitionData) return null;
 
+    // Ensure we have a valid eventId for state persistence
+    const eventId = competitionData.eventId || competitionData.id;
+
     const totalDeliverables = (competitionData.phases || []).reduce((sum, p) => sum + (p.deliverables?.length || 0), 0);
     const completedDeliverables = (competitionData.phases || []).reduce((sum, p) => sum + (p.deliverables?.filter(d => d.done).length || 0), 0);
     const overallPct = totalDeliverables ? Math.round((completedDeliverables / totalDeliverables) * 100) : 0;
@@ -233,7 +236,7 @@ const DeliverablesPanel = ({ competitionData, onDeliverableToggle }) => {
                         key={phase.id}
                         phase={phase}
                         index={idx}
-                        onToggle={(phaseId, delId) => onDeliverableToggle(competitionData.eventId, phaseId, delId)}
+                        onToggle={(phaseId, delId) => onDeliverableToggle(eventId, phaseId, delId)}
                     />
                 ))}
             </div>
